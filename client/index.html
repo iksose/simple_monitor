@@ -1,0 +1,45 @@
+<!doctype html>
+<html ng-app="Camaro">
+
+<head>
+  <base href="/" />
+  <link rel="stylesheet" href="client/css/bootstrap.css">
+  <script src="client/compiled/vendor.js"></script>
+  <script src="client/compiled/all.js"></script>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <!-- <div ui-view class="container slide" style="padding-top: 80px;"></div> -->
+  <div class='container-fluid'>
+    <div class='row'>
+      <div user-info></div>
+      <div class='col-sm-3'>
+        <div ui-view="navigation"></div>
+      </div>
+      <div class='col-sm-9'>
+        <div class="page-loading">
+          <i class="fa fa-cog fa-spin fa-5x"></i>
+        </div>
+        <div ui-view="container"></div>
+        <div ui-view="footer"></div>
+      </div>
+      <hr>
+      <pre>
+        <!-- Here's some values to keep an eye on in the sample in order to understand $state and $stateParams -->
+        $state = {{$state.current.name}} $stateParams = {{$stateParams}} $state full url = {{ $state.$current.url.source }}
+        <!-- $state.$current is not a public api, we are using it to
+       display the full url for learning purposes-->
+      </pre>
+    </div>
+  </div>
+</body>
+
+<style>
+  .hidden {
+    display: none !important;
+    visibility: hidden !important;
+  }
+</style>
+
+</html>
