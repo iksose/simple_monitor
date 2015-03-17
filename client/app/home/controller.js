@@ -1,18 +1,11 @@
 angular.module('simple_monitor')
-  .controller('homeCtrl', function($http) {
+  .controller('homeCtrl', function(Servers) {
     class HomeCtrl {
       constructor() {
-        this.ServerStatus = {
-          code: 0
-        };
+        this.servers = Servers.serversList;
       }
-      getStatus() {
-        $http.get('/api/secrets').then(() => {
-          homeCtrl.ServerStatus.code = 200;
-        })
-      }
+
     }
     var homeCtrl = new HomeCtrl;
-    homeCtrl.getStatus();
     return homeCtrl;
   })

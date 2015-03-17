@@ -4,4 +4,6 @@
   <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
 </div>
 
-{{homeCtrl.ServerStatus}}
+<div ng-repeat='server in homeCtrl.servers'>
+  <div server-status data=server></div>
+</div>
