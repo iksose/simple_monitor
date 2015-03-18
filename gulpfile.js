@@ -32,92 +32,32 @@ var gutil = require('gulp-util');
 var nodemon = require('gulp-nodemon');
 var del = require('del');
 
-var nodemon_instance;
 
-gulp.task('serve', ['babel'], function() {
-  if (!nodemon_instance) {
-    nodemon_instance = nodemon({
-      script: './lib/app.js',
-      // watch: './server/*/**.js',
-      watch: '*',
-      ext: 'js',
-      ignore: ['./client', './lib']
-    }).on('restart', function() {
-      console.log('~~~ restart server ~~~');
-    });
-  } else {
-    setTimeout(nodemon_instance.emit('restart'), 100);
-  }
-});
+var nodemon_instance
 
-gulp.task('serve_watch', ['serve'], function() {
-  return gulp.watch('src/**/*', ['serve']);
-});
+gulp.task('dev', function() {
+  nodemon_instance = nodemon({
+    script: './lib/app.js',
+    verbose: true,
+    ignore: ['*']
+  }).on('restart', function() {
+    console.log('~~~ restart server ~~~');
+  });
+
+  gulp.watch('./server/**/*', ['babel']);
+})
 
 
 gulp.task('babel', function() {
   // del(['./lib'], function() {
   //   spawn("babel", ["./server", "--out-dir", "./lib"])
-  // })
-  var child = spawn("babel", ["./server", "--out-dir", "./lib"])
+  // });
+  var child = spawn("babel", ["./server", "--out-dir", "./lib"]);
+  nodemon_instance.emit('restart')
 })
 
 gulp.task('clean', function() {
   del(['./lib'], function() {
-    spawn("babel", ["./server", "--out-dir", "./lib"])
+    // spawn("babel", ["./server", "--out-dir", "./lib"])
   })
 })
-
-
-// gulp.task('es6', function() {
-//
-//   gulp.watch('server/**/**.js', function(e) {
-//     // clean
-//     del(['./lib'], function() {
-//       // Finally execute your script below - here "ls -lA"
-//       var child = spawn("babel", ["./server", "--out-dir", "./lib"]),
-//         stdout = '',
-//         stderr = '';
-//
-//       child.stdout.setEncoding('utf8');
-//
-//       child.stdout.on('data', function(data) {
-//         stdout += data;
-//         gutil.log(data);
-//       });
-//
-//       child.stderr.setEncoding('utf8');
-//       child.stderr.on('data', function(data) {
-//         stderr += data;
-//         gutil.log(gutil.colors.red(data));
-//         // gutil.beep();
-//       });
-//
-//       child.on('close', function(code) {
-//         gutil.log("Done with exit code", code);
-//       });
-//     })
-//   });
-// });
-//
-// gulp.task('clean', function() {
-//   del(['./lib'], function() {
-//     spawn("babel", ["./server", "--out-dir", "./lib"])
-//   })
-// })
-//
-// gulp.task('babel', ['clean'], function() {
-//   var child = spawn("babel", ["./server", "--out-dir", "./lib"])
-// })
-//
-// gulp.task('develop', function() {
-//   nodemon({
-//       script: './lib/app.js',
-//       ext: 'js',
-//       ignore: ['./client', './lib']
-//     })
-//     .on('change', ['babel'])
-//     .on('restart', function() {
-//       console.log('restarted!')
-//     })
-// })

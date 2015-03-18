@@ -14,6 +14,7 @@ db.once('open', function() {
   // get all the users
 });
 
+
 var username = 'test';
 var password = '123456';
 mongoose.connect("mongodb://" + username + ":" + password + "@ds053139.mongolab.com:53139/test00");

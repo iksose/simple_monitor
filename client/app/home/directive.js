@@ -1,7 +1,7 @@
 angular.module('simple_monitor')
   .directive('serverStatus', function(Servers) {
     return {
-      restrict: 'A',
+      restrict: 'EA',
       template: `
       <p ng-class="directiveCtrl.isAlive ? 'bg-success' : 'bg-danger'" class='serverStatus'>
           {{data}}

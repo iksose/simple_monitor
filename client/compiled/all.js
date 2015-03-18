@@ -34,7 +34,7 @@ angular.module("simple_monitor").controller("homeCtrl", function (Servers) {
 
 angular.module("simple_monitor").directive("serverStatus", function (Servers) {
   return {
-    restrict: "A",
+    restrict: "EA",
     template: "\n      <p ng-class=\"directiveCtrl.isAlive ? 'bg-success' : 'bg-danger'\" class='serverStatus'>\n          {{data}}\n          <i class=\"fa fa-circle-o-notch fa-spin\" ng-show=\"directiveCtrl.isLoading\"></i>\n          <i class=\"fa fa-thumbs-o-up pull-right \" ng-show=\"directiveCtrl.isAlive\"></i>\n      </p>\n        <style>\n        p.serverStatus {\n          font-size: 2em\n        }\n        </style>",
     scope: {
       data: "="
