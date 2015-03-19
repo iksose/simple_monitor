@@ -4,4 +4,4 @@ node_js:
 before_script:
   - 'npm install -g bower grunt-cli karma'
 
-  script: gulp
+script: gulp
