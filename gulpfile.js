@@ -34,7 +34,7 @@ gulp.task('vendor', function() {
 });
 
 
-gulp.task('watch', function() {
+gulp.task('watch', ['default', 'vendor', 'test'], function() {
   gulp.watch(locations.js, ['default', 'vendor', 'test']);
 });
 
@@ -58,6 +58,10 @@ gulp.task('test', ['concat_tests'], function() {
   //   throw err;
   // });
 });
+
+gulp.task('ci-build', ['default', 'vendor', 'test'], function() {
+  console.log("ci-build complete")
+})
 
 // server
 
