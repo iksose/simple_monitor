@@ -2,15 +2,28 @@ var gulp = require('gulp');
 var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var concat = require('gulp-concat');
+var karma = require('gulp-karma');
+var gutil = require('gutil');
+
+var locations = {
+  js: 'client/app/**/*.js',
+  tests: 'client/app/**/spec.js'
+}
 
 gulp.task('default', function() {
-  return gulp.src('client/app/**/*.js')
+  return gulp.src([locations.js, "!" + locations.tests])
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(concat('all.js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('client/compiled'));
 });
+
+gulp.task('concat_tests', function() {
+  return gulp.src([locations.tests])
+    .pipe(concat('tests.js'))
+    .pipe(gulp.dest('client/compiled'));
+})
 
 gulp.task('vendor', function() {
   return gulp.src('client/vendor/*.js')
@@ -22,7 +35,28 @@ gulp.task('vendor', function() {
 
 
 gulp.task('watch', function() {
-  gulp.watch('client/app/**/*.js', ['default', 'vendor']);
+  gulp.watch(locations.js, ['default', 'vendor', 'test']);
+});
+
+var testFiles = [
+  'client/compiled/vendor.js',
+  'client/compiled/all.js',
+  'client/compiled/tests.js',
+  'client/app/**/**/*.html'
+]
+
+gulp.task('test', ['concat_tests'], function() {
+  // Be sure to return the stream
+  return gulp.src(testFiles)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', gutil.log);
+  // .on('error', function(err) {
+  //   // Make sure failed tests cause gulp to exit non-zero
+  //   throw err;
+  // });
 });
 
 // server

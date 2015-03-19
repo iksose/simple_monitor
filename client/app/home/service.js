@@ -6,7 +6,7 @@ angular.module('simple_monitor')
         this.getServers();
       }
       getServers() {
-        $http.get('/api/secrets')
+        return $http.get('/api/secrets')
           .success((servers) => {
             this.serversList.push(...servers);
           })

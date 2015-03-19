@@ -5,7 +5,7 @@ var app = angular.module('simple_monitor', [
   .config(
     ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       function($stateProvider, $urlRouterProvider, $locationProvider) {
-        $locationProvider.html5Mode(true);
+        // $locationProvider.html5Mode(true);
         // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
         $urlRouterProvider.otherwise('/');
 

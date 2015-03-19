@@ -2,17 +2,7 @@ angular.module('simple_monitor')
   .directive('serverStatus', function(Servers) {
     return {
       restrict: 'EA',
-      template: `
-      <p ng-class="directiveCtrl.isAlive ? 'bg-success' : 'bg-danger'" class='serverStatus'>
-          {{data}}
-          <i class="fa fa-circle-o-notch fa-spin" ng-show="directiveCtrl.isLoading"></i>
-          <i class="fa fa-thumbs-o-up pull-right " ng-show="directiveCtrl.isAlive"></i>
-      </p>
-        <style>
-        p.serverStatus {
-          font-size: 2em
-        }
-        </style>`,
+      templateUrl: 'client/app/home/directives/serverStatus/template.html',
       scope: {
         data: '='
       },

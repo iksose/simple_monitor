@@ -2,7 +2,7 @@
 
 // Make sure to include the `ui.router` module as a dependency
 var app = angular.module("simple_monitor", ["ui.router"]).config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $locationProvider) {
-  $locationProvider.html5Mode(true);
+  // $locationProvider.html5Mode(true);
   // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
   $urlRouterProvider.otherwise("/");
 
@@ -24,40 +24,12 @@ angular.module("simple_monitor").controller("homeCtrl", function (Servers) {
   var HomeCtrl = function HomeCtrl() {
     _classCallCheck(this, HomeCtrl);
 
+    this.test = ["a"];
     this.servers = Servers.serversList;
   };
 
   var homeCtrl = new HomeCtrl();
   return homeCtrl;
-});
-"use strict";
-
-angular.module("simple_monitor").directive("serverStatus", function (Servers) {
-  return {
-    restrict: "EA",
-    template: "\n      <p ng-class=\"directiveCtrl.isAlive ? 'bg-success' : 'bg-danger'\" class='serverStatus'>\n          {{data}}\n          <i class=\"fa fa-circle-o-notch fa-spin\" ng-show=\"directiveCtrl.isLoading\"></i>\n          <i class=\"fa fa-thumbs-o-up pull-right \" ng-show=\"directiveCtrl.isAlive\"></i>\n      </p>\n        <style>\n        p.serverStatus {\n          font-size: 2em\n        }\n        </style>",
-    scope: {
-      data: "="
-    },
-    controller: function controller($scope) {
-      this.interval;
-      this.init = function () {
-        var _this = this;
-
-        this.isLoading = true;
-        Servers.getHealth($scope.data).success(function (result) {
-          _this.isLoading = false;
-          _this.isAlive = result.isAlive;
-          clearInterval(_this.interval);
-          _this.interval = setInterval(function () {
-            _this.init();
-          }, 10000);
-        });
-      };
-      this.init();
-    },
-    controllerAs: "directiveCtrl"
-  };
 });
 "use strict";
 
@@ -81,7 +53,7 @@ angular.module("simple_monitor").service("Servers", function ($http) {
         value: function getServers() {
           var _this = this;
 
-          $http.get("/api/secrets").success(function (servers) {
+          return $http.get("/api/secrets").success(function (servers) {
             var _serversList;
 
             (_serversList = _this.serversList).push.apply(_serversList, _toConsumableArray(servers));
@@ -104,5 +76,49 @@ angular.module("simple_monitor").service("Servers", function ($http) {
 
   var service = new ServerService();
   return service;
+});
+"use strict";
+
+angular.module("simple_monitor").directive("masterStatus", function () {
+  return {
+    restrict: "EA",
+    templateUrl: "client/app/home/directives/masterStatus/template.html",
+    scope: {},
+    controller: function controller($scope) {
+      this.allPassing = true;
+    },
+    controllerAs: "directiveCtrl"
+  };
+});
+
+// data: '='
+"use strict";
+
+angular.module("simple_monitor").directive("serverStatus", function (Servers) {
+  return {
+    restrict: "EA",
+    templateUrl: "client/app/home/directives/serverStatus/template.html",
+    scope: {
+      data: "="
+    },
+    controller: function controller($scope) {
+      this.interval;
+      this.init = function () {
+        var _this = this;
+
+        this.isLoading = true;
+        Servers.getHealth($scope.data).success(function (result) {
+          _this.isLoading = false;
+          _this.isAlive = result.isAlive;
+          clearInterval(_this.interval);
+          _this.interval = setInterval(function () {
+            _this.init();
+          }, 10000);
+        });
+      };
+      this.init();
+    },
+    controllerAs: "directiveCtrl"
+  };
 });
 //# sourceMappingURL=all.js.map
