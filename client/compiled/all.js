@@ -79,6 +79,21 @@ angular.module("simple_monitor").service("Servers", function ($http) {
 });
 "use strict";
 
+angular.module("simple_monitor").directive("masterStatus", function () {
+  return {
+    restrict: "EA",
+    templateUrl: "client/app/home/directives/masterStatus/template.html",
+    scope: {},
+    controller: function controller($scope) {
+      this.allPassing = true;
+    },
+    controllerAs: "directiveCtrl"
+  };
+});
+
+// data: '='
+"use strict";
+
 angular.module("simple_monitor").directive("serverStatus", function (Servers) {
   return {
     restrict: "EA",
@@ -106,19 +121,4 @@ angular.module("simple_monitor").directive("serverStatus", function (Servers) {
     controllerAs: "directiveCtrl"
   };
 });
-"use strict";
-
-angular.module("simple_monitor").directive("masterStatus", function () {
-  return {
-    restrict: "EA",
-    templateUrl: "client/app/home/directives/masterStatus/template.html",
-    scope: {},
-    controller: function controller($scope) {
-      this.allPassing = true;
-    },
-    controllerAs: "directiveCtrl"
-  };
-});
-
-// data: '='
 //# sourceMappingURL=all.js.map
