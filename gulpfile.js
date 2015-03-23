@@ -69,11 +69,13 @@ var spawn = require('child_process').spawn;
 var gutil = require('gulp-util');
 var nodemon = require('gulp-nodemon');
 var del = require('del');
+var babel = require("gulp-babel");
 
 
-var nodemon_instance
+var nodemon_instance;
 
-gulp.task('dev', function() {
+
+gulp.task("dev", function() {
   nodemon_instance = nodemon({
     script: './lib/app.js',
     verbose: true,
@@ -81,17 +83,16 @@ gulp.task('dev', function() {
   }).on('restart', function() {
     console.log('~~~ restart server ~~~');
   });
-
   gulp.watch('./server/**/*', ['babel']);
-})
+});
 
-
-gulp.task('babel', function() {
-  // del(['./lib'], function() {
-  //   spawn("babel", ["./server", "--out-dir", "./lib"])
-  // });
-  var child = spawn("babel", ["./server", "--out-dir", "./lib"]);
-  nodemon_instance.emit('restart')
+gulp.task('babel', ['clean'], function() {
+  return gulp.src("./server/**/*.js")
+    .pipe(babel())
+    .pipe(gulp.dest("./lib"))
+    .on('end', function() {
+      nodemon_instance.emit('restart')
+    });
 })
 
 gulp.task('clean', function() {
@@ -99,3 +100,37 @@ gulp.task('clean', function() {
     // spawn("babel", ["./server", "--out-dir", "./lib"])
   })
 })
+
+// gulp.task('dev', function() {
+//   nodemon_instance = nodemon({
+//     script: './lib/app.js',
+//     verbose: true,
+//     ignore: ['*']
+//   }).on('restart', function() {
+//     console.log('~~~ restart server ~~~');
+//   });
+//
+//   gulp.watch('./server/**/*', ['babel']);
+// })
+//
+//
+// gulp.task('babel', function() {
+//   // del(['./lib'], function() {
+//   //   spawn("babel", ["./server", "--out-dir", "./lib"])
+//   // });
+//   var result = '';
+//   var child = spawn("babel", ["./server", "--out-dir", "./lib"]);
+//   child.stdout.on('data', function(data) {
+//     result += data.toString();
+//   });
+//   child.stdout.on('close', function(data) {
+//     console.log(result);
+//     nodemon_instance.emit('restart')
+//   })
+// })
+//
+// gulp.task('clean', function() {
+//   del(['./lib'], function() {
+//     // spawn("babel", ["./server", "--out-dir", "./lib"])
+//   })
+// })
