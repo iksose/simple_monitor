@@ -87,14 +87,19 @@ gulp.task("dev", function() {
 });
 
 gulp.task('babel', ['clean'], function() {
-  return gulp.src("./server/**/*.js")
-    .pipe(babel())
+  gulp.src("./server/**/*.js")
+    .pipe(babel({
+      optional: ['runtime']
+    }))
+    // .on('err', handleError)
+    .on('error', function(err) {
+      console.log(err.message);
+    })
     .pipe(gulp.dest("./lib"))
     .on('end', function() {
       nodemon_instance.emit('restart')
     });
 })
-
 gulp.task('clean', function() {
   del(['./lib'], function() {
     // spawn("babel", ["./server", "--out-dir", "./lib"])

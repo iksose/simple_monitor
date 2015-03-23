@@ -13,7 +13,7 @@ angular.module('simple_monitor')
           Servers.getHealth($scope.data)
             .then((result) => {
               this.isLoading = false;
-              this.isAlive = result.isAlive
+              this.isAlive = result.pingStatus
               clearInterval(this.interval);
               this.interval = setInterval(() => {
                 this.init();

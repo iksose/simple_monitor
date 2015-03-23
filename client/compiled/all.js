@@ -118,7 +118,7 @@ angular.module("simple_monitor").directive("serverStatus", function (Servers) {
         this.isLoading = true;
         Servers.getHealth($scope.data).then(function (result) {
           _this.isLoading = false;
-          _this.isAlive = result.isAlive;
+          _this.isAlive = result.pingStatus;
           clearInterval(_this.interval);
           _this.interval = setInterval(function () {
             _this.init();

@@ -2,7 +2,7 @@ module.exports = function(app) {
   var express = require('express');
   var ServerClass = require('../models/servers')
   var serversRouter = express.Router();
-  var ping = require('ping');
+  var co = require('co');
   var hosts = ['camaro-prod-1.clutchinsurance.com', 'camaro-qa-2.clutchinsurance.com',
     'camaro-qa-3.clutchinsurance.com', 'camaro-qa-4.clutchinsurance.com', 'camaro-qa-5.clutchinsurance.com'
   ];
@@ -18,8 +18,8 @@ module.exports = function(app) {
     var name = req.params.serverName;
     var server = new ServerClass(name);
     server.getStatus()
-      .then(function(data) {
-        res.send(data);
+      .then(function() {
+        res.send(server);
       })
   });
 
