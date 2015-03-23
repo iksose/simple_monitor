@@ -1,8 +1,12 @@
-<p ng-class="directiveCtrl.isAlive ? 'bg-success' : 'bg-danger'" class='serverStatus'>
-  {{data}}
-  <i class="fa fa-circle-o-notch fa-spin" ng-show="directiveCtrl.isLoading"></i>
-  <i class="fa fa-thumbs-o-up pull-right " ng-show="directiveCtrl.isAlive"></i>
-</p>
+<div class='row'>
+  <p ng-class="directiveCtrl.isAlive ? 'bg-success' : 'bg-danger'" class='serverStatus '>
+    <i class="fa fa-caret-square-o-right" ng-click='directiveCtrl.showInfo = !directiveCtrl.showInfo'></i> {{data}}
+    <i class="fa fa-circle-o-notch fa-spin" ng-show="directiveCtrl.isLoading"></i>
+    <i class="fa fa fa-check-circle-o pull-right" ng-show="directiveCtrl.isAlive"></i>
+    <i class="fa fa-exclamation-circle pull-right" ng-show="!directiveCtrl.isAlive"></i>
+  </p>
+  <detailed-info ng-if='directiveCtrl.showInfo'></detailed-info>
+</div>
 <style>
   p.serverStatus {
     font-size: 2em

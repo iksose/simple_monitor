@@ -1,6 +1,8 @@
 <div ng-class="directiveCtrl.allPassing? '' : 'jumbo-danger'" class='jumbotron'>
-  <h1>Master Status: Good?</h1>
-  <p>Digital Ocean Monitoring Service</p>
+  <center>
+    <h1>Master Status: Good?</h1>
+    <p>Last Updated: {{directiveCtrl.lastRequest}}</p>
+  </center>
 </div>
 
 <style>

@@ -4,11 +4,13 @@ angular.module('simple_monitor')
       constructor() {
         this.serversList = [];
         this.getServers();
+        this.lastRequest;
       }
       getServers() {
         return $http.get('/api/secrets')
           .success((servers) => {
             this.serversList.push(...servers);
+            this.lastRequest = Date.now();
           })
       }
       getHealth(url) {

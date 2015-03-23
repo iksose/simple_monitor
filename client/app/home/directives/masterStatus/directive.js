@@ -1,5 +1,5 @@
 angular.module('simple_monitor')
-  .directive('masterStatus', function() {
+  .directive('masterStatus', function(Servers) {
     return {
       restrict: 'EA',
       templateUrl: 'client/app/home/directives/masterStatus/template.html',
@@ -8,6 +8,7 @@ angular.module('simple_monitor')
       },
       controller: function($scope) {
         this.allPassing = true;
+        this.lastRequest = Servers.lastRequest;
       },
       controllerAs: 'directiveCtrl'
     };

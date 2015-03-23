@@ -19,9 +19,8 @@ describe('Unit: master status', function() {
     });
     Servers = _Servers_;
     httpBackend.when('GET', '/api/secrets').respond(200, []);
-    // httpBackend.when('GET', 'client/app/home/directives/masterStatus/template.html').passThrough();
     httpBackend.flush();
-    var template = _$templateCache_.get('templates/angular/mywidget.html');
+    // var template = _$templateCache_.get('templates/angular/mywidget.html');
   }));
 
   afterEach(function() {
@@ -41,20 +40,28 @@ describe('Unit: master status', function() {
     // to retrieve and use other services
     inject(function($compile) {
       elm = $compile(tpl)(scope);
-      // elm = form.find('div');
     });
     // $digest is necessary to finalize the directive generation
     scope.$digest();
   }
 
-  describe("directive text", function() {
+  describe("directive", function() {
     beforeEach(function() {
       compileDirective();
     });
-    it('should be a jumbotron', function() {
-      var hasClass = angular.element(elm.find('div')[0]).hasClass('jumbotron');
-      expect(hasClass).toBe(true);
+    it('should exist', function() {
+      // var hasClass = angular.element(elm.find('div')[0]).hasClass('jumbotron');
+      // expect(hasClass).toBe(true);
+      expect(elm).toBeDefined();
     });
+    it('should have the time since last request', function() {
+      var isolateScope = elm.isolateScope().directiveCtrl;
+      expect(isolateScope.lastRequest).toBeGreaterThan(1427121077403);
+    })
+    it('display the last request', function() {
+      var isolateScope = elm.isolateScope().directiveCtrl;
+    })
 
   });
+
 })

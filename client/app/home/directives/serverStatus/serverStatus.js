@@ -17,11 +17,24 @@ angular.module('simple_monitor')
               clearInterval(this.interval);
               this.interval = setInterval(() => {
                 this.init();
-              }, 10000)
+              }, 600000)
             })
         }
         this.init();
       },
-      controllerAs: 'directiveCtrl'
+      controllerAs: 'directiveCtrl',
+    };
+  })
+  .directive('detailedInfo', function(Servers) {
+    return {
+      restrict: 'EA',
+      require: '^serverStatus',
+      templateUrl: 'client/app/home/directives/serverStatus/details.html',
+      scope: false,
+      controller: function($scope) {
+        var parentCtrl = $scope.$parent.directiveCtrl;
+      },
+      link: function(scope, elem, attrs, controllerInstance) {},
+      controllerAs: 'detailedInfoCtrl'
     };
   })

@@ -46,6 +46,7 @@ angular.module("simple_monitor").service("Servers", function ($http) {
 
       this.serversList = [];
       this.getServers();
+      this.lastRequest;
     }
 
     _prototypeProperties(ServerService, null, {
@@ -57,6 +58,7 @@ angular.module("simple_monitor").service("Servers", function ($http) {
             var _serversList;
 
             (_serversList = _this.serversList).push.apply(_serversList, _toConsumableArray(servers));
+            _this.lastRequest = Date.now();
           });
         },
         writable: true,
@@ -79,13 +81,14 @@ angular.module("simple_monitor").service("Servers", function ($http) {
 });
 "use strict";
 
-angular.module("simple_monitor").directive("masterStatus", function () {
+angular.module("simple_monitor").directive("masterStatus", function (Servers) {
   return {
     restrict: "EA",
     templateUrl: "client/app/home/directives/masterStatus/template.html",
     scope: {},
     controller: function controller($scope) {
       this.allPassing = true;
+      this.lastRequest = Servers.lastRequest;
     },
     controllerAs: "directiveCtrl"
   };
@@ -113,12 +116,23 @@ angular.module("simple_monitor").directive("serverStatus", function (Servers) {
           clearInterval(_this.interval);
           _this.interval = setInterval(function () {
             _this.init();
-          }, 10000);
+          }, 600000);
         });
       };
       this.init();
     },
-    controllerAs: "directiveCtrl"
+    controllerAs: "directiveCtrl" };
+}).directive("detailedInfo", function (Servers) {
+  return {
+    restrict: "EA",
+    require: "^serverStatus",
+    templateUrl: "client/app/home/directives/serverStatus/details.html",
+    scope: false,
+    controller: function controller($scope) {
+      var parentCtrl = $scope.$parent.directiveCtrl;
+    },
+    link: function link(scope, elem, attrs, controllerInstance) {},
+    controllerAs: "detailedInfoCtrl"
   };
 });
 //# sourceMappingURL=all.js.map
