@@ -18,21 +18,6 @@ var app = angular.module("simple_monitor", ["ui.router"]).config(["$stateProvide
 }]);
 "use strict";
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
-angular.module("simple_monitor").controller("homeCtrl", function (Servers) {
-  var HomeCtrl = function HomeCtrl() {
-    _classCallCheck(this, HomeCtrl);
-
-    this.test = ["a"];
-    this.servers = Servers.serversList;
-  };
-
-  var homeCtrl = new HomeCtrl();
-  return homeCtrl;
-});
-"use strict";
-
 var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -46,7 +31,9 @@ angular.module("simple_monitor").service("Servers", function ($http) {
 
       this.serversList = [];
       this.getServers();
-      this.lastRequest;
+      this.lastRequest = {
+        UTC: Date.now()
+      };
     }
 
     _prototypeProperties(ServerService, null, {
@@ -58,7 +45,6 @@ angular.module("simple_monitor").service("Servers", function ($http) {
             var _serversList;
 
             (_serversList = _this.serversList).push.apply(_serversList, _toConsumableArray(servers));
-            _this.lastRequest = Date.now();
           });
         },
         writable: true,
@@ -66,7 +52,12 @@ angular.module("simple_monitor").service("Servers", function ($http) {
       },
       getHealth: {
         value: function getHealth(url) {
-          return $http.get("/api/secrets/" + url);
+          var _this = this;
+
+          return $http.get("/api/secrets/" + url).then(function (data) {
+            _this.lastRequest.UTC = Date.now();
+            return data.data;
+          });
         },
         writable: true,
         configurable: true
@@ -78,6 +69,21 @@ angular.module("simple_monitor").service("Servers", function ($http) {
 
   var service = new ServerService();
   return service;
+});
+"use strict";
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+angular.module("simple_monitor").controller("homeCtrl", function (Servers) {
+  var HomeCtrl = function HomeCtrl() {
+    _classCallCheck(this, HomeCtrl);
+
+    this.test = ["a"];
+    this.servers = Servers.serversList;
+  };
+
+  var homeCtrl = new HomeCtrl();
+  return homeCtrl;
 });
 "use strict";
 
@@ -110,7 +116,7 @@ angular.module("simple_monitor").directive("serverStatus", function (Servers) {
         var _this = this;
 
         this.isLoading = true;
-        Servers.getHealth($scope.data).success(function (result) {
+        Servers.getHealth($scope.data).then(function (result) {
           _this.isLoading = false;
           _this.isAlive = result.isAlive;
           clearInterval(_this.interval);

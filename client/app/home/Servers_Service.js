@@ -4,17 +4,22 @@ angular.module('simple_monitor')
       constructor() {
         this.serversList = [];
         this.getServers();
-        this.lastRequest;
+        this.lastRequest = {
+          UTC: Date.now()
+        };
       }
       getServers() {
         return $http.get('/api/secrets')
           .success((servers) => {
             this.serversList.push(...servers);
-            this.lastRequest = Date.now();
           })
       }
       getHealth(url) {
         return $http.get('/api/secrets/' + url)
+          .then((data) => {
+            this.lastRequest.UTC = Date.now();
+            return data.data;
+          })
       }
     }
     var service = new ServerService;

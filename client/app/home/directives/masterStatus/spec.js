@@ -56,7 +56,7 @@ describe('Unit: master status', function() {
     });
     it('should have the time since last request', function() {
       var isolateScope = elm.isolateScope().directiveCtrl;
-      expect(isolateScope.lastRequest).toBeGreaterThan(1427121077403);
+      expect(isolateScope.lastRequest.UTC).toBeGreaterThan(1427121077403);
     })
     it('display the last request', function() {
       var isolateScope = elm.isolateScope().directiveCtrl;
